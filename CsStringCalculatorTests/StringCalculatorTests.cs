@@ -57,7 +57,7 @@
         }
 
         [TestMethod]
-        public void NegativeNumbers()
+        public void OneNegativeNumber()
         {
             try
             {
@@ -67,6 +67,20 @@
             catch (ArgumentException ex)
             {
                 Assert.AreEqual("negatives not allowed: -1", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void MultipleNegativeNumbers()
+        {
+            try
+            {
+                StringCalculator.Add("4,-1,2,-5,-6");
+                Assert.Fail("Expected ArgumentException");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual("negatives not allowed: -1,-5,-6", ex.Message);
             }
         }
 

@@ -14,7 +14,6 @@ let Add (arg:string) =
         | "" -> raise (ArgumentException("Missing number"))
         | _ ->
             match Int32.Parse(s) with
-            | x when x < 0 -> raise (ArgumentException(sprintf "negatives not allowed: %d" x))
             | x when x > 1000 -> 0
             | x -> x
 
@@ -31,5 +30,15 @@ let Add (arg:string) =
         | [] -> sum
         | head::tail -> AddRec (sum + head) tail // tail recursive
 
-    AddRec 0 args
+    let negative x = x < 0
+
+    let join separator (xs:int seq) =
+        String.Join(separator, xs)
+
+    match args with
+        | _ when Seq.exists negative args -> 
+            let negatives = args |> Seq.where negative |> join ","
+            raise (ArgumentException(sprintf "negatives not allowed: %s" negatives))
+        | _ ->
+            AddRec 0 args
 
